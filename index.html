@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bidos Alteration | Tailoring · Dry Cleaning · Pressing</title>
+
+<!--
+  SQUARE SETUP — replace these two values before going live.
+  Sandbox script for testing: https://sandbox.web.squarecdn.com/v1/square.js
+  Production script (use once you have real credentials): https://web.squarecdn.com/v1/square.js
+-->
+<script type="text/javascript" src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+
+<style>
+  :root{
+    --navy:#14213d; --navy-light:#1f3358; --gold:#c8a04d; --cream:#faf7f2;
+    --border:#ece7de; --text:#33363f; --muted:#6b6f7a;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Segoe UI',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;color:#1a1a1a;background:#fff;}
+  a{color:var(--navy);text-decoration:none;}
+  a:hover{color:var(--gold);}
+  ::selection{background:var(--gold);color:#fff;}
+  button{font-family:inherit;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+
+  header{position:sticky;top:0;z-index:50;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:14px 32px;box-shadow:0 2px 12px rgba(0,0,0,0.15);flex-wrap:wrap;gap:12px;}
+  .logo-wrap{display:flex;align-items:center;gap:12px;cursor:pointer;}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1;}
+  .logo-text .name{color:#fff;font-weight:800;font-size:19px;letter-spacing:.3px;}
+  .logo-text .tag{color:var(--gold);font-size:10px;letter-spacing:1.5px;font-weight:600;}
+  nav{display:flex;align-items:center;gap:26px;flex-wrap:wrap;}
+  nav .navlink{color:#fff;font-weight:600;font-size:14px;cursor:pointer;background:none;border:none;padding:0;}
+  nav .navlink.active{color:var(--gold);}
+  .cart-btn{display:flex;align-items:center;gap:6px;color:#fff;font-size:13px;cursor:pointer;background:none;border:none;}
+  .cart-btn.active{color:var(--gold);}
+  .cart-badge{background:var(--gold);color:var(--navy);font-weight:800;font-size:11px;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;}
+  .book-btn{background:var(--gold);color:var(--navy);border:none;padding:10px 20px;border-radius:3px;font-weight:700;font-size:13px;letter-spacing:.3px;cursor:pointer;}
+
+  .page{display:none;animation:fadeUp .5s ease;}
+  .page.active{display:block;}
+
+  .hero{background:linear-gradient(135deg,var(--navy),var(--navy-light));padding:100px 32px 90px;text-align:center;color:#fff;}
+  .hero-inner{max-width:820px;margin:0 auto;}
+  .eyebrow{color:var(--gold);font-weight:700;letter-spacing:2px;font-size:13px;margin:0 0 18px;}
+  .hero h1{font-size:44px;font-weight:800;line-height:1.15;margin:0 0 22px;color:#fff;}
+  .hero p{font-size:18px;line-height:1.6;color:#d8dce6;max-width:640px;margin:0 auto 36px;}
+  .hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+  .btn-primary{background:var(--gold);color:var(--navy);border:none;padding:15px 28px;border-radius:3px;font-weight:700;font-size:14px;cursor:pointer;}
+  .btn-outline{background:transparent;color:#fff;border:1.5px solid #fff;padding:15px 28px;border-radius:3px;font-weight:700;font-size:14px;cursor:pointer;}
+  .btn-outline-soft{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4);padding:15px 28px;border-radius:3px;font-weight:700;font-size:14px;cursor:pointer;}
+
+  section.block{padding:80px 32px;}
+  h2.section-title{text-align:center;font-size:30px;font-weight:800;color:var(--navy);margin:0 0 8px;}
+  p.section-sub{text-align:center;color:var(--muted);margin:0 0 48px;font-size:15px;}
+
+  .grid-5{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;}
+  .card{background:#fff;padding:28px 22px;border-radius:4px;text-align:center;box-shadow:0 4px 18px rgba(20,33,61,.06);}
+  .card .mark{width:48px;height:48px;border-radius:50%;background:var(--navy);color:var(--gold);font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+  .card h3{font-size:16px;font-weight:700;color:var(--navy);margin:0 0 8px;}
+  .card p{font-size:13.5px;color:var(--muted);line-height:1.55;margin:0;}
+
+  .grid-4{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:26px;}
+  .feat-card{border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer;}
+  .feat-card .photo{height:150px;background-size:cover;background-position:center;}
+  .feat-card .body{padding:20px;}
+  .feat-card h3{font-size:16px;font-weight:700;color:var(--navy);margin:0 0 8px;}
+  .feat-card p{font-size:13.5px;color:var(--muted);line-height:1.5;margin:0;}
+
+  .about-wrap{max-width:760px;margin:0 auto;padding:90px 32px;}
+  .about-photo{height:280px;margin:0 0 32px;border-radius:4px;overflow:hidden;background-size:cover;background-position:center;}
+  .about-wrap p.body-text{font-size:16px;line-height:1.8;color:var(--text);margin:0 0 22px;}
+  .mission-box{background:#fff;border-left:3px solid var(--gold);padding:24px 28px;margin-top:32px;}
+  .mission-box .label{font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--gold);margin:0 0 8px;}
+  .mission-box .text{font-size:17px;line-height:1.6;color:var(--navy);margin:0;font-weight:500;}
+
+  .services-wrap{max-width:1000px;margin:0 auto;padding:90px 32px;}
+  .service-cat{border:1px solid var(--border);border-radius:4px;padding:28px 32px;display:grid;grid-template-columns:1fr auto;gap:20px;align-items:start;margin-bottom:22px;}
+  .service-cat h3{font-size:19px;font-weight:700;color:var(--navy);margin:0 0 12px;}
+  .service-cat ul{margin:0;padding-left:18px;color:var(--text);font-size:14.5px;line-height:1.9;}
+  .price-box{background:var(--cream);padding:12px 18px;border-radius:3px;white-space:nowrap;text-align:center;}
+  .price-box .lbl{font-size:10px;font-weight:700;letter-spacing:1px;color:#8a8f9c;margin:0 0 4px;}
+  .price-box .val{font-size:16px;font-weight:700;color:var(--gold);margin:0;}
+
+  .shop-wrap{padding:90px 32px;background:var(--cream);min-height:70vh;}
+  .shop-inner{max-width:1120px;margin:0 auto;}
+  .filters{display:flex;gap:10px;justify-content:center;margin-bottom:40px;flex-wrap:wrap;}
+  .filter-btn{padding:9px 18px;border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;border:1.5px solid #ddd8cc;background:#fff;color:var(--navy);}
+  .filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+  .prod-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px;}
+  .prod-card{background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 4px 16px rgba(20,33,61,.06);}
+  .prod-card .photo{height:180px;background-size:cover;background-position:center;}
+  .prod-card .body{padding:20px;}
+  .prod-card .cat{font-size:10px;font-weight:700;letter-spacing:1px;color:var(--gold);margin:0 0 6px;}
+  .prod-card h3{font-size:15.5px;font-weight:700;color:var(--navy);margin:0 0 6px;}
+  .prod-card .desc{font-size:13px;color:var(--muted);line-height:1.5;margin:0 0 14px;min-height:38px;}
+  .prod-card .row{display:flex;align-items:center;justify-content:space-between;}
+  .prod-card .price{font-size:18px;font-weight:800;color:var(--navy);}
+  .add-btn{background:var(--navy);color:#fff;border:none;padding:9px 16px;border-radius:3px;font-size:12.5px;font-weight:700;cursor:pointer;}
+  .add-btn.in-cart{background:var(--gold);color:var(--navy);}
+
+  .booking-wrap{max-width:640px;margin:0 auto;padding:90px 32px;}
+  .confirm-box{background:var(--cream);border-left:3px solid var(--gold);padding:28px 30px;margin-bottom:32px;border-radius:4px;}
+  .confirm-box p.title{font-weight:700;color:var(--navy);font-size:15px;margin:0 0 14px;}
+  .confirm-box p{font-size:13.5px;color:var(--text);line-height:1.7;margin:0 0 6px;}
+  .form-col{display:flex;flex-direction:column;gap:18px;}
+  .form-row2{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  label.field{display:flex;flex-direction:column;gap:6px;font-size:12.5px;font-weight:600;color:var(--navy);}
+  input, select, textarea{padding:12px 14px;border:1.5px solid #ddd8cc;border-radius:3px;font-size:14px;font-family:inherit;background:#fff;}
+  textarea{resize:vertical;}
+  .submit-btn{background:var(--navy);color:#fff;border:none;padding:16px;border-radius:3px;font-weight:700;font-size:14.5px;cursor:pointer;margin-top:8px;}
+  .error{color:#b3261e;font-size:12px;font-weight:600;}
+
+  footer{background:var(--navy);color:#d8dce6;padding:48px 32px 28px;}
+  .footer-inner{max-width:1120px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+  footer .name{color:#fff;font-weight:800;font-size:17px;margin:0 0 8px;}
+  footer .tag{color:var(--gold);font-size:12px;letter-spacing:1px;font-weight:600;margin:0;}
+  footer .info{font-size:13px;line-height:1.9;color:#aeb3c2;}
+  footer .info p{margin:0;}
+  footer .copy{text-align:center;color:#5b6178;font-size:12px;margin:32px 0 0;}
+
+  /* Cart drawer */
+  .overlay{position:fixed;inset:0;background:rgba(20,33,61,.5);z-index:100;display:none;}
+  .overlay.open{display:block;}
+  .cart-drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:#fff;z-index:101;transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;}
+  .cart-drawer.open{transform:translateX(0);}
+  .cart-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .cart-header h3{margin:0;color:var(--navy);font-size:18px;}
+  .cart-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--navy);}
+  .cart-items{flex:1;overflow-y:auto;padding:16px 24px;}
+  .cart-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);gap:10px;}
+  .cart-item .info{flex:1;}
+  .cart-item .info .n{font-weight:700;color:var(--navy);font-size:14px;margin:0 0 4px;}
+  .cart-item .info .p{color:var(--muted);font-size:13px;margin:0;}
+  .qty-ctrl{display:flex;align-items:center;gap:8px;}
+  .qty-ctrl button{width:26px;height:26px;border-radius:50%;border:1px solid var(--border);background:#fff;cursor:pointer;font-weight:700;color:var(--navy);}
+  .remove-btn{background:none;border:none;color:#b3261e;font-size:12px;cursor:pointer;font-weight:600;}
+  .cart-footer{padding:20px 24px;border-top:1px solid var(--border);}
+  .cart-total{display:flex;justify-content:space-between;font-weight:800;color:var(--navy);font-size:16px;margin-bottom:16px;}
+  .checkout-btn{width:100%;background:var(--gold);color:var(--navy);border:none;padding:15px;border-radius:3px;font-weight:700;font-size:14px;cursor:pointer;}
+  .empty-cart{color:var(--muted);font-size:14px;text-align:center;padding:40px 0;}
+
+  /* Checkout modal (Square) */
+  .checkout-modal{position:fixed;inset:0;background:rgba(20,33,61,.6);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+  .checkout-modal.open{display:flex;}
+  .checkout-box{background:#fff;border-radius:6px;max-width:440px;width:100%;padding:28px;max-height:90vh;overflow-y:auto;}
+  .checkout-box h3{margin:0 0 6px;color:var(--navy);font-size:19px;}
+  .checkout-box .amount{color:var(--muted);font-size:14px;margin:0 0 20px;}
+  #card-container{margin:16px 0;min-height:90px;}
+  .pay-btn{width:100%;background:var(--navy);color:#fff;border:none;padding:15px;border-radius:3px;font-weight:700;font-size:14.5px;cursor:pointer;}
+  .pay-btn:disabled{opacity:.6;cursor:not-allowed;}
+  .checkout-cancel{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;margin-top:12px;width:100%;text-align:center;}
+  #payment-status{font-size:13px;margin-top:12px;text-align:center;}
+  #payment-status.ok{color:#1e7d34;}
+  #payment-status.fail{color:#b3261e;}
+
+  @media(max-width:640px){
+    .hero h1{font-size:32px;}
+    .form-row2{grid-template-columns:1fr;}
+    .service-cat{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap" onclick="goTo('home')">
+    <svg width="38" height="38" viewBox="0 0 38 38">
+      <rect x="8" y="5" width="16" height="22" rx="2" fill="#c8a04d"></rect>
+      <path d="M8 9 L3 14 L8 18 Z" fill="#ffffff"></path>
+      <path d="M24 9 L30 14 L24 18 Z" fill="#ffffff"></path>
+      <g stroke="#14213d" stroke-width="1.8" fill="none" stroke-linecap="round">
+        <circle cx="28" cy="28" r="2.6" fill="#14213d" stroke="none"></circle>
+        <circle cx="28" cy="35" r="2.6" fill="#14213d" stroke="none"></circle>
+        <line x1="30" y1="26" x2="14" y2="10"></line>
+        <line x1="30" y1="37" x2="20" y2="27"></line>
+        <line x1="14" y1="26" x2="24" y2="16"></line>
+      </g>
+    </svg>
+    <div class="logo-text">
+      <span class="name">Bidos Alteration</span>
+      <span class="tag">TAILORING · DRY CLEANING · PRESSING</span>
+    </div>
+  </div>
+  <nav>
+    <button class="navlink" data-nav="home" onclick="goTo('home')">Home</button>
+    <button class="navlink" data-nav="about" onclick="goTo('about')">About</button>
+    <button class="navlink" data-nav="services" onclick="goTo('services')">Services</button>
+    <button class="navlink" data-nav="shop" onclick="goTo('shop')">Shop</button>
+    <button class="cart-btn" data-nav="shop" onclick="openCart()">
+      <span>Cart</span>
+      <span class="cart-badge" id="cartCount">0</span>
+    </button>
+    <button class="book-btn" onclick="goTo('booking')">Book Appointment</button>
+  </nav>
+</header>
+
+<!-- HOME -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">TRUSTED SINCE 2010 · NORTH MIAMI</p>
+      <h1>Perfect Fit. Professional Care. Trusted for 16 Years in North Miami.</h1>
+      <p>Bidos Alteration delivers expert tailoring, alterations, dry cleaning, and pressing services for men, women, and children. Secure online payment, easy booking, and home delivery available.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="goTo('booking')">Book an Appointment</button>
+        <button class="btn-outline" onclick="goTo('shop')">Shop Online</button>
+        <button class="btn-outline-soft" onclick="goTo('services')">View Services</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" style="background:var(--cream);">
+    <h2 class="section-title">Why Customers Love Us</h2>
+    <p class="section-sub">Sixteen years of craftsmanship, trust, and reliable service.</p>
+    <div class="grid-5">
+      <div class="card"><div class="mark">16</div><h3>16 Years of Excellence</h3><p>Serving North Miami since 2010 with unmatched craftsmanship and reliability.</p></div>
+      <div class="card"><div class="mark">★</div><h3>Highly Trusted</h3><p>Our clients love our precision, our honesty, and our respect for deadlines.</p></div>
+      <div class="card"><div class="mark">⚡</div><h3>Fast Turnaround</h3><p>Same day or next day service available for selected items.</p></div>
+      <div class="card"><div class="mark">$</div><h3>Secure Online Payment</h3><p>Pay safely through our encrypted checkout system.</p></div>
+      <div class="card"><div class="mark">🚚</div><h3>Pickup & Delivery</h3><p>Convenience at your doorstep.</p></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2 class="section-title" style="margin-bottom:48px;">Featured Services</h2>
+    <div class="grid-4">
+      <div class="feat-card" onclick="goTo('services')">
+        <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1741275269919-7a45627bd454?fm=jpg&q=80&w=900&auto=format&fit=crop');"></div>
+        <div class="body"><h3>Tailoring & Alteration</h3><p>Perfect adjustments for suits, dresses, shirts, coats, uniforms, and more.</p></div>
+      </div>
+      <div class="feat-card" onclick="goTo('services')">
+        <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1757252872535-01668694fb44?fm=jpg&q=80&w=900&auto=format&fit=crop');"></div>
+        <div class="body"><h3>Dry Cleaning</h3><p>Professional care for delicate fabrics, business wear, and special garments.</p></div>
+      </div>
+      <div class="feat-card" onclick="goTo('services')">
+        <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1647202152259-98fe50ad0618?fm=jpg&q=80&w=900&auto=format&fit=crop');"></div>
+        <div class="body"><h3>Pressing / Ironing</h3><p>Sharp, wrinkle free finish for work, events, and everyday elegance.</p></div>
+      </div>
+      <div class="feat-card" onclick="goTo('shop')">
+        <div class="photo" style="background-image:url('https://images.unsplash.com/photo-1761090617068-f1b3257d27ad?fm=jpg&q=80&w=900&auto=format&fit=crop');"></div>
+        <div class="body"><h3>Online Shop</h3><p>Men's, women's, and kids' clothing with detailed descriptions and prices.</p></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="page-about">
+  <section class="about-wrap">
+    <p class="eyebrow" style="text-align:left;">ABOUT US</p>
+    <h1 style="font-size:38px;font-weight:800;color:var(--navy);margin:0 0 26px;">Sixteen Years of Craftsmanship in North Miami</h1>
+    <div class="about-photo" style="background-image:url('https://images.unsplash.com/photo-1741275269919-7a45627bd454?fm=jpg&q=80&w=1400&auto=format&fit=crop');"></div>
+    <p class="body-text">Bidos Alteration has been a cornerstone of North Miami for over 16 years. Founded in 2010, our business built its reputation on precision, reliability, and exceptional customer care. We are known for respecting deadlines, delivering high quality work, and treating every garment with the attention it deserves.</p>
+    <p class="body-text">Our clients trust us because we combine craftsmanship with modern convenience: online booking, secure payment, automated reminders, and home delivery.</p>
+    <div class="mission-box">
+      <p class="label">OUR MISSION</p>
+      <p class="text">To make every customer feel confident, comfortable, and stylish in perfectly fitted clothing.</p>
+    </div>
+  </section>
+</div>
+
+<!-- SERVICES -->
+<div class="page" id="page-services">
+  <section class="services-wrap">
+    <p class="eyebrow" style="text-align:center;">SERVICES</p>
+    <h1 style="font-size:38px;font-weight:800;color:var(--navy);margin:0 0 48px;text-align:center;">What We Offer</h1>
+    <div class="service-cat">
+      <div><h3>Men's Tailoring & Alteration</h3><ul>
+        <li>Suit resizing (waist, shoulders, sleeves)</li>
+        <li>Hemming trousers</li>
+        <li>Shirt adjustments</li>
+        <li>Coat and jacket tailoring</li>
+        <li>Zipper and button repairs</li>
+      </ul></div>
+      <div class="price-box"><p class="lbl">PRICE RANGE</p><p class="val">$12 – $85</p></div>
+    </div>
+    <div class="service-cat">
+      <div><h3>Women's Tailoring & Alteration</h3><ul>
+        <li>Dress resizing (waist, bust, hips)</li>
+        <li>Skirt hemming</li>
+        <li>Blouse adjustments</li>
+        <li>Evening gown alterations</li>
+        <li>Delicate fabric handling</li>
+      </ul></div>
+      <div class="price-box"><p class="lbl">PRICE RANGE</p><p class="val">$10 – $95</p></div>
+    </div>
+    <div class="service-cat">
+      <div><h3>Kids' Tailoring</h3><ul>
+        <li>School uniform adjustments</li>
+        <li>Pants hemming</li>
+        <li>Dress resizing</li>
+        <li>Reinforced stitching for durability</li>
+      </ul></div>
+      <div class="price-box"><p class="lbl">PRICE RANGE</p><p class="val">$8 – $35</p></div>
+    </div>
+    <div class="service-cat">
+      <div><h3>Dry Cleaning</h3><ul>
+        <li>Suits, dresses, coats, uniforms</li>
+        <li>Stain removal</li>
+        <li>Odor treatment</li>
+        <li>Fabric protection</li>
+      </ul></div>
+      <div class="price-box"><p class="lbl">PRICE RANGE</p><p class="val">$6 – $25</p></div>
+    </div>
+    <div class="service-cat">
+      <div><h3>Pressing / Ironing</h3><ul>
+        <li>Shirts, pants, dresses, suits</li>
+        <li>Crisp, professional finish</li>
+      </ul></div>
+      <div class="price-box"><p class="lbl">PRICE RANGE</p><p class="val">$3 – $12</p></div>
+    </div>
+  </section>
+</div>
+
+<!-- SHOP -->
+<div class="page" id="page-shop">
+  <section class="shop-wrap">
+    <div class="shop-inner">
+      <p class="eyebrow" style="text-align:center;">ONLINE SHOP</p>
+      <h1 style="font-size:38px;font-weight:800;color:var(--navy);margin:0 0 32px;text-align:center;">Men's, Women's & Kids' Clothing</h1>
+      <div class="filters" id="filters"></div>
+      <div class="prod-grid" id="prodGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- BOOKING -->
+<div class="page" id="page-booking">
+  <section class="booking-wrap">
+    <p class="eyebrow" style="text-align:center;">BOOK AN APPOINTMENT</p>
+    <h1 style="font-size:34px;font-weight:800;color:var(--navy);margin:0 0 36px;text-align:center;">Reserve Your Fitting</h1>
+
+    <div class="confirm-box" id="confirmBox" style="display:none;">
+      <p class="title">Appointment Requested</p>
+      <p>SMS confirmation: "Your appointment at Bidos Alteration is confirmed for <span id="confirmDateTime"></span>."</p>
+      <p style="color:var(--muted);">Reminder sent 24 hours before. You'll also receive a notification when your garment is ready and when delivery is on the way.</p>
+    </div>
+
+    <form class="form-col" id="bookingForm" onsubmit="submitBooking(event)">
+      <div class="form-row2">
+        <label class="field">Full Name
+          <input type="text" id="fullName" placeholder="Jane Doe" required>
+        </label>
+        <label class="field">Phone Number
+          <input type="tel" id="phone" placeholder="(305) 555-0134" required>
+        </label>
+      </div>
+      <label class="field">Email
+        <input type="email" id="email" placeholder="jane@email.com" required>
+      </label>
+      <div class="form-row2">
+        <label class="field">Service Type
+          <select id="serviceType">
+            <option value="Alteration">Alteration</option>
+            <option value="Dry Cleaning">Dry Cleaning</option>
+            <option value="Pressing">Pressing</option>
+          </select>
+        </label>
+        <label class="field">Garment Category
+          <select id="garmentCategory">
+            <option value="Men">Men</option>
+            <option value="Women">Women</option>
+            <option value="Kids">Kids</option>
+          </select>
+        </label>
+      </div>
+      <div class="form-row2">
+        <label class="field">Preferred Date & Time
+          <input type="text" id="dateTime" placeholder="e.g. Jul 24, 2:00 PM" required>
+        </label>
+        <label class="field">Pickup or Drop off
+          <select id="dropoff">
+            <option value="Drop off">Drop off</option>
+            <option value="Pickup">Pickup</option>
+          </select>
+        </label>
+      </div>
+      <label class="field">Special Instructions
+        <textarea id="instructions" rows="4" placeholder="Anything we should know?"></textarea>
+      </label>
+      <button type="submit" class="submit-btn">Confirm Appointment</button>
+    </form>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <p class="name">Bidos Alteration</p>
+      <p class="tag">Tailoring · Alteration · Dry Cleaning · Pressing</p>
+    </div>
+    <div class="info">
+      <p>North Miami, FL</p>
+      <p>Mon–Sat 8:00 AM – 10:00 PM</p>
+    </div>
+  </div>
+  <p class="copy">© 2026 Bidos Alteration. All rights reserved.</p>
+</footer>
+
+<!-- CART DRAWER -->
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button class="cart-close" onclick="closeCart()">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total</span><span id="cartTotal">$0</span></div>
+    <button class="checkout-btn" onclick="openCheckout()">Proceed to Checkout</button>
+  </div>
+</div>
+
+<!-- SQUARE CHECKOUT MODAL -->
+<div class="checkout-modal" id="checkoutModal">
+  <div class="checkout-box">
+    <h3>Secure Checkout</h3>
+    <p class="amount">Total due: <strong id="checkoutAmount">$0</strong></p>
+    <div id="card-container"></div>
+    <button id="card-button" class="pay-btn" type="button">Pay Now</button>
+    <div id="payment-status"></div>
+    <button class="checkout-cancel" onclick="closeCheckout()">Cancel</button>
+  </div>
+</div>
+
+<script>
+  const products = [
+    { id: 'p1', category: 'Men', label: "MEN'S", name: 'Classic Navy Suit', desc: 'Slim fit, wrinkle resistant fabric, perfect for business.', price: 149, photo: 'https://images.unsplash.com/photo-1593032465175-481ac7f401a0?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p2', category: 'Men', label: "MEN'S", name: 'White Dress Shirt – Premium Cotton', desc: 'Breathable, easy press fabric.', price: 39, photo: 'https://images.unsplash.com/photo-1741275269919-7a45627bd454?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p3', category: 'Men', label: "MEN'S", name: 'Tailored Chinos', desc: 'Comfort stretch, modern cut.', price: 45, photo: 'https://images.unsplash.com/photo-1761090617068-f1b3257d27ad?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p4', category: 'Women', label: "WOMEN'S", name: 'Elegant Black Dress', desc: 'Perfect for events and evenings.', price: 79, photo: 'https://images.unsplash.com/photo-1568251188392-ae32f898cb3b?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p5', category: 'Women', label: "WOMEN'S", name: 'Silk Blouse – Soft Touch', desc: 'Lightweight and elegant.', price: 49, photo: 'https://images.unsplash.com/photo-1761090617068-f1b3257d27ad?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p6', category: 'Women', label: "WOMEN'S", name: 'Tailored Skirt – Knee Length', desc: 'Classic tailored silhouette.', price: 35, photo: 'https://images.unsplash.com/photo-1568251188392-ae32f898cb3b?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p7', category: 'Kids', label: "KIDS'", name: 'School Uniform Shirt', desc: 'Durable, easy-care fabric.', price: 19, photo: 'https://images.unsplash.com/photo-1761090617068-f1b3257d27ad?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p8', category: 'Kids', label: "KIDS'", name: 'Uniform Pants', desc: 'Reinforced stitching for play.', price: 22, photo: 'https://images.unsplash.com/photo-1761090617068-f1b3257d27ad?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p9', category: 'Kids', label: "KIDS'", name: 'Special Occasion Dress', desc: 'Comfortable and dressy.', price: 35, photo: 'https://images.unsplash.com/photo-1568251188392-ae32f898cb3b?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p10', category: 'Packages', label: 'CARE PACKAGE', name: 'Business Week Package', desc: '5 shirts + 2 pants, dry clean + press.', price: 39, photo: 'https://images.unsplash.com/photo-1757252872535-01668694fb44?fm=jpg&q=80&w=700&auto=format&fit=crop' },
+    { id: 'p11', category: 'Packages', label: 'CARE PACKAGE', name: 'Special Occasion Care', desc: 'Dress or suit plus pressing.', price: 25, photo: 'https://images.unsplash.com/photo-1647202152259-98fe50ad0618?fm=jpg&q=80&w=700&auto=format&fit=crop' }
+  ];
+
+  let currentFilter = 'All';
+  let cart = JSON.parse(localStorage.getItem('bidos_cart') || '{}');
+
+  function goTo(page){
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.navlink').forEach(n => n.classList.toggle('active', n.dataset.nav === page));
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function saveCart(){
+    localStorage.setItem('bidos_cart', JSON.stringify(cart));
+    renderCartCount();
+    renderCartDrawer();
+    renderProducts();
+  }
+
+  function addToCart(id){
+    cart[id] = (cart[id] || 0) + 1;
+    saveCart();
+  }
+  function decFromCart(id){
+    if(!cart[id]) return;
+    cart[id] -= 1;
+    if(cart[id] <= 0) delete cart[id];
+    saveCart();
+  }
+  function removeFromCart(id){
+    delete cart[id];
+    saveCart();
+  }
+
+  function cartTotalCents(){
+    return Object.entries(cart).reduce((sum, [id, qty]) => {
+      const p = products.find(x => x.id === id);
+      return sum + (p ? p.price * qty * 100 : 0);
+    }, 0);
+  }
+
+  function renderCartCount(){
+    const total = Object.values(cart).reduce((a,b) => a+b, 0);
+    document.getElementById('cartCount').textContent = total;
+  }
+
+  function renderFilters(){
+    const names = ['All','Men','Women','Kids','Packages'];
+    const el = document.getElementById('filters');
+    el.innerHTML = names.map(n => `<button class="filter-btn ${currentFilter===n?'active':''}" onclick="setFilter('${n}')">${n}</button>`).join('');
+  }
+  function setFilter(n){
+    currentFilter = n;
+    renderFilters();
+    renderProducts();
+  }
+
+  function renderProducts(){
+    const list = products.filter(p => currentFilter === 'All' || p.category === currentFilter);
+    const el = document.getElementById('prodGrid');
+    el.innerHTML = list.map(p => {
+      const inCart = cart[p.id];
+      return `<div class="prod-card">
+        <div class="photo" style="background-image:url('${p.photo}');"></div>
+        <div class="body">
+          <p class="cat">${p.label}</p>
+          <h3>${p.name}</h3>
+          <p class="desc">${p.desc}</p>
+          <div class="row">
+            <span class="price">$${p.price}</span>
+            <button class="add-btn ${inCart ? 'in-cart' : ''}" onclick="addToCart('${p.id}')">${inCart ? 'In Cart (' + inCart + ')' : 'Add to Cart'}</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function openCart(){
+    document.getElementById('overlay').classList.add('open');
+    document.getElementById('cartDrawer').classList.add('open');
+    renderCartDrawer();
+  }
+  function closeCart(){
+    document.getElementById('overlay').classList.remove('open');
+    document.getElementById('cartDrawer').classList.remove('open');
+  }
+
+  function renderCartDrawer(){
+    const el = document.getElementById('cartItems');
+    const ids = Object.keys(cart);
+    if(ids.length === 0){
+      el.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+      document.getElementById('cartTotal').textContent = '$0';
+      return;
+    }
+    let total = 0;
+    el.innerHTML = ids.map(id => {
+      const p = products.find(x => x.id === id);
+      const qty = cart[id];
+      total += p.price * qty;
+      return `<div class="cart-item">
+        <div class="info">
+          <p class="n">${p.name}</p>
+          <p class="p">$${p.price} x ${qty} = $${p.price*qty}</p>
+        </div>
+        <div class="qty-ctrl">
+          <button onclick="decFromCart('${id}')">−</button>
+          <span>${qty}</span>
+          <button onclick="addToCart('${id}')">+</button>
+        </div>
+        <button class="remove-btn" onclick="removeFromCart('${id}')">Remove</button>
+      </div>`;
+    }).join('');
+    document.getElementById('cartTotal').textContent = '$' + total;
+  }
+
+  /* ---------------- SQUARE CHECKOUT ----------------
+     Replace these two placeholders with your real Square credentials
+     (Square Developer Dashboard > your app > Sandbox or Production tab).
+  ------------------------------------------------------- */
+  const SQUARE_APP_ID = 'SANDBOX-sq0idb-REPLACE_WITH_YOUR_APP_ID';
+  const SQUARE_LOCATION_ID = 'REPLACE_WITH_YOUR_LOCATION_ID';
+  // This must point to your deployed backend endpoint (see api/process-payment.js).
+  const PAYMENT_ENDPOINT = '/api/process-payment';
+
+  let squareCard = null;
+  let squarePayments = null;
+
+  async function initSquare(){
+    if(!window.Square){
+      console.warn('Square.js did not load. Check your internet connection or script tag.');
+      return;
+    }
+    squarePayments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
+    squareCard = await squarePayments.card();
+    await squareCard.attach('#card-container');
+  }
+
+  function openCheckout(){
+    const ids = Object.keys(cart);
+    if(ids.length === 0){ alert('Your cart is empty.'); return; }
+    const cents = cartTotalCents();
+    document.getElementById('checkoutAmount').textContent = '$' + (cents/100).toFixed(2);
+    document.getElementById('payment-status').textContent = '';
+    document.getElementById('payment-status').className = '';
+    document.getElementById('checkoutModal').classList.add('open');
+    if(!squareCard){ initSquare(); }
+  }
+  function closeCheckout(){
+    document.getElementById('checkoutModal').classList.remove('open');
+  }
+
+  document.getElementById('card-button').addEventListener('click', async () => {
+    const statusEl = document.getElementById('payment-status');
+    const payBtn = document.getElementById('card-button');
+    if(!squareCard){
+      statusEl.textContent = 'Payment form is still loading, please wait a moment and try again.';
+      statusEl.className = 'fail';
+      return;
+    }
+    payBtn.disabled = true;
+    statusEl.textContent = 'Processing payment…';
+    statusEl.className = '';
+    try{
+      const tokenResult = await squareCard.tokenize();
+      if(tokenResult.status !== 'OK'){
+        throw new Error(tokenResult.errors?.[0]?.message || 'Card tokenization failed.');
+      }
+      const amountCents = cartTotalCents();
+      const response = await fetch(PAYMENT_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sourceId: tokenResult.token,
+          amount: amountCents,
+          currency: 'USD',
+          items: cart
+        })
+      });
+      const result = await response.json();
+      if(!response.ok || !result.success){
+        throw new Error(result.error || 'Payment could not be processed.');
+      }
+      statusEl.textContent = 'Payment successful! A confirmation email will follow shortly.';
+      statusEl.className = 'ok';
+      cart = {};
+      saveCart();
+      setTimeout(() => { closeCheckout(); closeCart(); }, 2000);
+    }catch(err){
+      statusEl.textContent = err.message || 'Something went wrong. Please try again.';
+      statusEl.className = 'fail';
+    }finally{
+      payBtn.disabled = false;
+    }
+  });
+
+  function submitBooking(e){
+    e.preventDefault();
+    const dateTime = document.getElementById('dateTime').value;
+    document.getElementById('confirmDateTime').textContent = dateTime;
+    document.getElementById('confirmBox').style.display = 'block';
+    document.getElementById('confirmBox').scrollIntoView({behavior:'smooth'});
+  }
+
+  renderFilters();
+  renderProducts();
+  renderCartCount();
+</script>
+
+</body>
+</html>
